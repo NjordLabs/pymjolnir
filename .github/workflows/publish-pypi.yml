@@ -1,55 +1,48 @@
----
-# Manual PyPI upload: Actions → Publish to PyPI → Run workflow (enter an existing tag, e.g. v0.1.0).
-#
-# Recommended: PyPI "Trusted Publishing" (OIDC) — no long-lived PYPI_API_TOKEN in GitHub.
-#   Configure at https://pypi.org/manage/project/pymjolnir/settings/publishing/ (or TestPyPI first)
-#   with this repo + workflow file name, environment optional.
-#
-# Alternative: repository secret PYPI_API_TOKEN and pass `password: ${{ secrets.PYPI_API_TOKEN }}`
-#   to pypa/gh-action-pypi-publish (disable OIDC by omitting id-token permission if required).
 name: Publish to PyPI
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 on:
   workflow_dispatch:
     inputs:
       tag:
-        description: Existing Git tag to publish (e.g. v0.1.0)
+        description: Existing Git tag to publish (for example v0.1.0)
         required: true
         type: string
+
 permissions:
   contents: read
   id-token: write
+  attestations: write
+
 jobs:
   publish:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    environment: pypi
     steps:
-      - name: Checkout tag
-        uses: actions/checkout@v6
+      - name: Validate release tag
+        env:
+          RELEASE_TAG: ${{ inputs.tag }}
+        run: |
+          set -euo pipefail
+          if ! printf '%s\n' "${RELEASE_TAG}" | grep -Eq '^v[0-9]+\.[0-9]+\.[0-9]+$'; then
+            echo "Tag must match vX.Y.Z" >&2
+            exit 1
+          fi
+      - name: Check out tag
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: refs/tags/${{ inputs.tag }}
           fetch-depth: 0
-      - name: Validate release tag
-        run: |
-          case "${{ inputs.tag }}" in
-            v[0-9]*.[0-9]*.[0-9]*) ;;
-            *)
-              echo "Tag must match the release pattern vX.Y.Z (received: ${{ inputs.tag }})" >&2
-              exit 1
-              ;;
-          esac
-          git rev-parse --verify "refs/tags/${{ inputs.tag }}"
-      - name: Set up Python
-        uses: actions/setup-python@v6
-        with:
-          python-version: '3.13'
-      - name: Set up uv
-        uses: astral-sh/setup-uv@v8.1.0
-      - name: Sync dev toolchain (lockfile)
-        run: uv sync --frozen --extra dev
+          persist-credentials: false
+      - name: Confirm the checked out tag
+        env:
+          RELEASE_TAG: ${{ inputs.tag }}
+        run: git rev-parse --verify --end-of-options "refs/tags/${RELEASE_TAG}"
+      - name: Install uv
+        uses: astral-sh/setup-uv@cec208311dfd045dd5311c1add060b2062131d57 # v8.0.0
       - name: Build distributions
         run: uv build
-      - name: Publish to PyPI (Trusted Publishing)
-        uses: pypa/gh-action-pypi-publish@release/v1
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@7245906fb61fa33a13554f9d5fb856fe61758086 # v1.14.3
         with:
           attestations: true

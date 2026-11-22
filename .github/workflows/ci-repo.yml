@@ -1,0 +1,83 @@
+name: Repository checks
+
+on:
+  workflow_dispatch:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions: {}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  pins:
+    permissions:
+      contents: read
+    uses: pirlruc/commondevops/.github/workflows/common-pins-verify.yml@0e78652fa9f65b9d98033ac82bf9e5308ebb17a7
+    with:
+      scripts_ref: 0e78652fa9f65b9d98033ac82bf9e5308ebb17a7
+
+  threshold-drift:
+    permissions:
+      contents: read
+    uses: pirlruc/commondevops/.github/workflows/common-threshold-drift.yml@0e78652fa9f65b9d98033ac82bf9e5308ebb17a7
+    with:
+      scripts_ref: 0e78652fa9f65b9d98033ac82bf9e5308ebb17a7
+    secrets:
+      checkout_token: ${{ secrets.GUARDRAILS_READ_TOKEN }}
+
+  scaffold:
+    permissions:
+      contents: read
+      issues: read
+    uses: pirlruc/commondevops/.github/workflows/common-scaffold-verify.yml@0e78652fa9f65b9d98033ac82bf9e5308ebb17a7
+    with:
+      blocking: true
+      scripts_ref: 0e78652fa9f65b9d98033ac82bf9e5308ebb17a7
+    secrets:
+      checkout_token: ${{ secrets.COMMONDEVOPS_READ_TOKEN }}
+      packs_token: ${{ secrets.GUARDRAILS_READ_TOKEN }}
+
+  docs:
+    permissions:
+      contents: read
+    uses: pirlruc/commondevops/.github/workflows/common-doc-verify.yml@0e78652fa9f65b9d98033ac82bf9e5308ebb17a7
+    with:
+      blocking: true
+      shell_scripts: scripts/*.sh
+      ruff_paths: scripts/lint-doc-links.py
+      yaml_files: docs/issues.yml docs/guardrail-deviations.yml docs/issues-sync-targets.yml
+      yaml_globs: .github/workflows/*.yml
+      run_link_lint: true
+      scripts_ref: 0e78652fa9f65b9d98033ac82bf9e5308ebb17a7
+    secrets:
+      checkout_token: ${{ secrets.COMMONDEVOPS_READ_TOKEN }}
+
+  dependency-review:
+    permissions:
+      contents: read
+      pull-requests: read
+    uses: pirlruc/commondevops/.github/workflows/common-dependency-review.yml@0e78652fa9f65b9d98033ac82bf9e5308ebb17a7
+
+  scorecard:
+    permissions:
+      contents: read
+      actions: read
+      security-events: write
+      id-token: write
+    uses: pirlruc/commondevops/.github/workflows/common-scorecard.yml@0e78652fa9f65b9d98033ac82bf9e5308ebb17a7
+    with:
+      blocking: false
+
+  token-audit:
+    permissions:
+      contents: read
+    uses: pirlruc/commondevops/.github/workflows/common-token-audit.yml@0e78652fa9f65b9d98033ac82bf9e5308ebb17a7
+    with:
+      scripts_ref: 0e78652fa9f65b9d98033ac82bf9e5308ebb17a7
+    secrets:
+      checkout_token: ${{ secrets.COMMONDEVOPS_READ_TOKEN }}
+      guardrails_token: ${{ secrets.GUARDRAILS_READ_TOKEN }}

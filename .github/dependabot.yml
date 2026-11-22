@@ -1,37 +1,49 @@
----
+# Org multi-ecosystem Dependabot (SC-DEP-001/002/003).
 version: 2
-updates:
-  - package-ecosystem: uv
-    directory: /
+
+registries:
+  github-private:
+    type: git
+    url: https://github.com
+    username: x-access-token
+    password: ${{secrets.DEPENDABOT_GITHUB_TOKEN}}
+
+multi-ecosystem-groups:
+  all-dependencies:
     schedule:
-      interval: weekly
-      day: monday
+      interval: monthly
       time: "06:00"
       timezone: Europe/Lisbon
-    open-pull-requests-limit: 5
-    groups:
-      python-dev-tooling:
-        dependency-type: development
-        patterns: ['*']
+    commit-message:
+      prefix: build
+      include: scope
+
+updates:
   - package-ecosystem: github-actions
     directory: /
-    schedule:
-      interval: weekly
-      day: monday
-      time: "06:15"
-      timezone: Europe/Lisbon
-    open-pull-requests-limit: 5
-    groups:
-      github-actions:
-        patterns: ['*']
+    patterns: ["*"]
+    multi-ecosystem-group: all-dependencies
+    cooldown:
+      default-days: 7
+  - package-ecosystem: uv
+    directory: /
+    patterns: ["*"]
+    multi-ecosystem-group: all-dependencies
+    cooldown:
+      default-days: 7
   - package-ecosystem: pre-commit
     directory: /
+    patterns: ["*"]
+    multi-ecosystem-group: all-dependencies
+    cooldown:
+      default-days: 7
+  - package-ecosystem: gitsubmodule
+    directory: /
+    registries:
+      - github-private
     schedule:
-      interval: weekly
-      day: monday
-      time: "06:30"
+      interval: monthly
+      time: "06:00"
       timezone: Europe/Lisbon
-    open-pull-requests-limit: 5
-    groups:
-      pre-commit-hooks:
-        patterns: ['*']
+    cooldown:
+      default-days: 7

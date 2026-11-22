@@ -1,0 +1,72 @@
+repo: NjordLabs/pymjolnir
+
+milestones:
+  - name: Phase 1 — Foundation
+    epics:
+      - id: PAT-001
+        status: open
+        title: Ship the design-pattern library
+        overview:
+          problem: >-
+            Callers were about to grow a second copy of a factory and a
+            singleton inside a graph engine.
+          goal: >-
+            One typed registry, a locked singleton, a multiton, and a chain
+            of responsibility, with the org Python gates.
+        decision: >-
+          In the context of a Python service library, facing duplicated
+          construction code, we decided to keep patterns in their own
+          package, to achieve one implementation, accepting that the graph
+          engine takes a dependency on this package.
+        acceptance_criteria:
+          - Registry rejects a duplicate key and an unknown key
+          - Singleton and multiton are safe for concurrent callers
+          - Chain stops at the first handled outcome
+        guardrail_refs:
+          - PY-TEST-002
+          - PY-CONC-001
+        tasks:
+          - id: PAT-001-T1
+            status: open
+            title: Implement the four patterns and the quality caller
+            instructions:
+              files:
+                - src/pymjolnir/registry.py
+                - src/pymjolnir/singleton.py
+                - src/pymjolnir/multiton.py
+                - src/pymjolnir/chain.py
+                - .github/workflows/ci-quality.yml
+            verification:
+              - sh scripts/check-ci-local.sh
+            guardrail_refs:
+              - PY-TEST-002
+          - id: PAT-001-T2
+            status: open
+            title: Publish to PyPI with a trusted publisher
+            instructions:
+              files:
+                - .github/workflows/publish-pypi.yml
+            verification:
+              - Pending publisher for NjordLabs/pymjolnir, workflow .github/workflows/publish-pypi.yml, environment pypi
+            guardrail_refs:
+              - PY-TEST-002
+          - id: PAT-001-T3
+            status: open
+            title: Run the test job on Python 3.14
+            instructions:
+              files:
+                - .github/workflows/ci-quality.yml
+            verification:
+              - sh scripts/check-ci-local.sh
+            guardrail_refs:
+              - PY-TEST-002
+          - id: PAT-001-T4
+            status: open
+            title: Add a repo-level container CI script
+            instructions:
+              files:
+                - scripts/check-ci-docker.sh
+            verification:
+              - sh scripts/check-ci-docker.sh
+            guardrail_refs:
+              - PY-TEST-002

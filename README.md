@@ -1,19 +1,24 @@
 # pymjolnir
 
-Design patterns Python library
+Design patterns for Python 3.13: a thread-safe registry, a singleton,
+a multiton, and a chain of responsibility.
 
-## Releases (local Commitizen)
+The package is not on PyPI. When `v0.1.0` is published, install that
+tag:
 
-Releases are driven from your machine, not by automated bump jobs on GitHub.
+```bash
+pip install "pymjolnir @ git+https://github.com/NjordLabs/pymjolnir.git@v0.1.0"
+```
 
-1. On a branch that is ready to release (usually `main` after merging), install dev tools from the
-   lockfile: `uv sync --frozen --extra dev`.
-2. Run **`cz bump`**. [Commitizen](https://github.com/commitizen-tools/commitizen) updates
-   `pyproject.toml` / `CHANGELOG.md` and creates a **semver tag** (e.g. `v0.2.0`) per
-   `[tool.commitizen]` in `pyproject.toml`.
-3. Push commits and the new tag: **`git push`** and **`git push origin vX.Y.Z`**.
-4. GitHub runs **`.github/workflows/release.yml`** on the tag and creates a **GitHub Release** with
-   the built sdist/wheel.
-5. To publish that tag to **PyPI**, run the manual workflow **Publish to PyPI** (see
-   `.github/workflows/publish-pypi.yml`) and enter the same tag. Configure **Trusted Publishing** on
-   PyPI for that workflow first.
+```python
+from pymjolnir import Registry
+
+registry = Registry()
+registry.register("echo", lambda value: value)
+registry.create("echo", "ok")
+```
+
+`singleton` and `multiton` cache one instance, or one instance per
+key. `Chain` runs handlers in order until one returns a value.
+
+Source and issues: [NjordLabs/pymjolnir](https://github.com/NjordLabs/pymjolnir)

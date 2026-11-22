@@ -1,0 +1,34 @@
+name: Quality
+
+on:
+  workflow_dispatch:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions: {}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  python-quality:
+    permissions:
+      actions: write
+      contents: write
+      packages: read
+      pull-requests: write
+      security-events: write
+    uses: pirlruc/pydevops/.github/workflows/python-quality.yml@2953853bb9954722e8e2d378554ce44845912c0d
+    with:
+      devops_repository: pirlruc/pydevops
+      devops_ref: 2953853bb9954722e8e2d378554ce44845912c0d
+      strictness_level: High
+      docstring_format: Google
+      python_version: "3.13"
+      python_versions: '["3.13"]'
+      container_username: pirlruc
+    secrets:
+      checkout_token: ${{ secrets.PYDEVOPS_READ_TOKEN }}
+      container_token: ${{ secrets.GHCR_READ_TOKEN }}
