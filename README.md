@@ -1,19 +1,19 @@
 # pymjolnir
 
-Design patterns Python library
+Design patterns for Python: a thread-safe registry, singleton, multiton, and chain of responsibility.
 
-## Releases (local Commitizen)
+```bash
+pip install pymjolnir
+```
 
-Releases are driven from your machine, not by automated bump jobs on GitHub.
+Pin a release tag. The package requires Python 3.13.
 
-1. On a branch that is ready to release (usually `main` after merging), install dev tools from the
-   lockfile: `uv sync --frozen --extra dev`.
-2. Run **`cz bump`**. [Commitizen](https://github.com/commitizen-tools/commitizen) updates
-   `pyproject.toml` / `CHANGELOG.md` and creates a **semver tag** (e.g. `v0.2.0`) per
-   `[tool.commitizen]` in `pyproject.toml`.
-3. Push commits and the new tag: **`git push`** and **`git push origin vX.Y.Z`**.
-4. GitHub runs **`.github/workflows/release.yml`** on the tag and creates a **GitHub Release** with
-   the built sdist/wheel.
-5. To publish that tag to **PyPI**, run the manual workflow **Publish to PyPI** (see
-   `.github/workflows/publish-pypi.yml`) and enter the same tag. Configure **Trusted Publishing** on
-   PyPI for that workflow first.
+```python
+from pymjolnir import Registry, singleton
+
+registry = Registry()
+registry.register("echo", lambda value: value)
+registry.create("echo", "ok")
+```
+
+Source and issues: https://github.com/NjordLabs/pymjolnir

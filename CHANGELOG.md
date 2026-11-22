@@ -9,4 +9,6 @@ Release notes are updated with [Commitizen](https://github.com/commitizen-tools/
 
 ### Added
 
-- Project template: packaging, tooling, CI, and release workflows.
+- Registry, singleton, multiton, and chain of responsibility.
+- Guardrails and github-scaffold submodules, and callers for the Python quality workflows.
+- Project template: packaging, tooling, and release workflows.
