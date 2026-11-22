@@ -5,8 +5,8 @@
 | Field | Value |
 |-------|-------|
 | Package | `pymjolnir` |
-| Python | 3.13 |
-| Pins | guardrails `1.15.0` (`2d4bb70`), scaffold `1.12.0` (`9c443ea`), pydevops `3.8.0` (`8151d94`) |
+| Python | 3.13 and 3.14 |
+| Pins | guardrails `1.15.0` (`2d4bb70`), scaffold `1.12.0` (`9c443ea`), pydevops (`ce31af67`) |
 
 ## Scope
 
@@ -23,7 +23,13 @@ Design patterns only. Logging lives in `mimirlog`. Graph execution lives in `nod
 
 ```bash
 sh scripts/check-ci-local.sh
+sh scripts/check-ci-docker.sh
 ```
+
+`check-ci-docker.sh` runs the same gates in `ghcr.io/pirlruc/ci-python`
+(digest-pinned). That image has no `uv`, so the script installs this
+package inside the container and leaves the checkout read-only. The
+image is private.
 
 ## Known pitfalls
 
@@ -33,12 +39,14 @@ sh scripts/check-ci-local.sh
 
 ## Suggested next work
 
-- PyPI publish stays open. `v0.1.0` is the GitHub Release.
+- PyPI publish (PAT-001-T2) stays open. `v0.1.0` is the GitHub Release, and the README install URL stays on that wheel until 0.1.1 is published.
 
 ## Recent history
 
-- 2026-11-22: Transferred to NjordLabs. Adopted the scaffold. Added the four patterns.
+- fix(patterns): raise when a factory re-enters the same wrapper
+- chore(deps): require pylint 4.0.9 and set 0.1.1
+- ci: pin pydevops, skip dependabot secret jobs, add the docker gate
+- docs: record 0.1.1 and close the landed pattern tasks
 - docs(readme): install the v0.1.0 release wheel
-- Pull request 52 merged. Annotated tag `v0.1.0` is the release.
 
 *Last updated: 2026-11-22.*
