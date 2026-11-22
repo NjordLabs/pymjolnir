@@ -16,4 +16,4 @@ registry.register("echo", lambda value: value)
 registry.create("echo", "ok")
 ```
 
-Source and issues: https://github.com/NjordLabs/pymjolnir
+Source and issues: [NjordLabs/pymjolnir](https://github.com/NjordLabs/pymjolnir)

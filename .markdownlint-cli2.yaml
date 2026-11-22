@@ -8,7 +8,7 @@ config:
   MD060: false
 ignores:
   - "docs/guardrails/**"
-  - ".github/scaffold/**"
+  - ".github/**"
   - ".agents/**"
   - "AGENTS.md"
   - "CLAUDE.md"
