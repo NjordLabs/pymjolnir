@@ -40,6 +40,7 @@ def test_concurrent_register_and_create() -> None:
     barrier = threading.Barrier(8)
 
     def add(index: int) -> None:
+        """Register one creator after the barrier opens."""
         barrier.wait()
         registry.register(str(index), lambda value=index: value)
 

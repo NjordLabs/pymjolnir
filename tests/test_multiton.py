@@ -14,6 +14,7 @@ def test_multiton_caches_per_key() -> None:
     built: list[str] = []
 
     def factory(key: str) -> str:
+        """Remember each key the cache builds."""
         built.append(key)
         return key
 
@@ -41,6 +42,7 @@ def test_concurrent_multiton_builds_each_key_once() -> None:
     lock = threading.Lock()
 
     def factory(key: str) -> str:
+        """Count constructions for one key."""
         with lock:
             counts[key] += 1
         return key
@@ -49,6 +51,7 @@ def test_concurrent_multiton_builds_each_key_once() -> None:
     barrier = threading.Barrier(10)
 
     def take(key: str) -> None:
+        """Wait, then read the cached value."""
         barrier.wait()
         assert cache.get(key) == key
 

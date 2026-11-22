@@ -27,7 +27,6 @@ dev = [
   "commitizen>=3.0",
   "coverage[toml]>=7.13.5",
   "mypy>=1.20.2",
-  "pre-commit==4.6.0",
   "pydantic>=2.0",
   "pylint>=3.0",
   "pytest>=8.0",
@@ -40,8 +39,15 @@ Changelog = "https://github.com/NjordLabs/pymjolnir/blob/main/CHANGELOG.md"
 Issues = "https://github.com/NjordLabs/pymjolnir/issues"
 Repository = "https://github.com/NjordLabs/pymjolnir"
 
+[tool.interrogate]
+fail-under = 95
+ignore-nested-classes = true
+ignore-nested-functions = true
+ignore-private = true
+ignore-semiprivate = true
+
 [tool.bandit]
-exclude_dirs = [".venv", "build", "dist", "tests"]
+exclude_dirs = [".venv", "build", "dist", "tests", "scripts", "docs", ".github"]
 
 # Release flow: local `cz bump` → push tag → GitHub "Release" workflow → optional manual PyPI.
 [tool.commitizen]
@@ -54,11 +60,11 @@ version_provider = "pep621"
 check_untyped_defs = true
 disallow_incomplete_defs = true
 disallow_untyped_defs = true
+exclude = ["(^|/)docs/", "(^|/)\\.github/", "(^|/)scripts/"]
 explicit_package_bases = true
 mypy_path = ["src"]
 namespace_packages = true
 no_implicit_optional = true
-plugins = ["pydantic.mypy"]
 python_version = "3.13"
 show_error_codes = true
 strict = false
@@ -76,11 +82,6 @@ source = ["pymjolnir"]
 [tool.coverage.report]
 fail_under = 95
 show_missing = true
-
-[tool.pydantic-mypy]
-init_typed = true
-warn_required_dynamic_aliases = true
-warn_untyped_fields = true
 
 [tool.pylint.format]
 max-line-length = 100
@@ -124,7 +125,7 @@ select = [
 ignore-one-line-docstrings = false
 
 [tool.ruff.lint.per-file-ignores]
-"tests/**" = ["D"]
+"tests/**" = ["D", "DOC"]
 
 [tool.ruff.lint.pydocstyle]
 convention = "google"

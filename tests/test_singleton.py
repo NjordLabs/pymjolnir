@@ -14,6 +14,7 @@ def test_singleton_reuses_the_first_instance() -> None:
         """Counts constructions."""
 
         def __init__(self, value: int) -> None:
+            """Store the constructor argument."""
             self.value = value
 
     wrapped = singleton(Counter)
@@ -37,6 +38,7 @@ def test_concurrent_singleton_builds_once() -> None:
         """Records how many times it is constructed."""
 
         def __init__(self) -> None:
+            """Count this construction."""
             nonlocal built
             with lock:
                 built += 1
@@ -45,6 +47,7 @@ def test_concurrent_singleton_builds_once() -> None:
     found: list[Once] = []
 
     def take() -> None:
+        """Wait, then construct the singleton."""
         barrier.wait()
         found.append(Once())
 
