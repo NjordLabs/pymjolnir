@@ -18,9 +18,13 @@ class Multiton[T]:
         self._factory = factory
         self._items: dict[str, T] = {}
         self._lock = threading.Lock()
+        self._guard = _CallGuard()
 
     def get(self, key: str) -> T:
         """Return the cached value for ``key``, creating it when needed.
+
+        A factory that calls this multiton again on the same thread fails
+        instead of waiting on the lock. A factory that raises is not cached.
 
         Args:
             key: Cache key. An empty key is rejected.
@@ -30,14 +34,21 @@ class Multiton[T]:
 
         Raises:
             ValueError: ``key`` is empty.
+            RuntimeError: The factory re-entered this multiton on the same thread.
         """
         if key == "":
             raise ValueError("key must not be empty")
+        if self._guard.building:
+            raise RuntimeError("multiton factory re-entered the same wrapper")
         with self._lock:
             try:
                 return self._items[key]
             except KeyError:
-                created = self._factory(key)
+                self._guard.building = True
+                try:
+                    created = self._factory(key)
+                finally:
+                    self._guard.building = False
                 self._items[key] = created
                 return created
 
@@ -52,3 +63,12 @@ class Multiton[T]:
                 self._items.clear()
                 return
             self._items.pop(key, None)
+
+
+class _CallGuard(threading.local):
+    """Per-thread flag set while this multiton's factory is running."""
+
+    def __init__(self) -> None:
+        """Start outside a factory call."""
+        super().__init__()
+        self.building = False

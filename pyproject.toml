@@ -4,7 +4,7 @@ requires = ["setuptools>=82.0.1", "wheel>=0.47.0"]
 
 [project]
 name = "pymjolnir"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = []
 requires-python = ">=3.13"
 authors = [{name = "pirlruc"}]
@@ -28,7 +28,7 @@ dev = [
   "coverage[toml]>=7.13.5",
   "mypy>=1.20.2",
   "pydantic>=2.0",
-  "pylint>=3.0",
+  "pylint>=4.0.9",
   "pytest>=8.0",
   "pytest-cov>=6.0",
   "interrogate>=1.7.0",
@@ -68,7 +68,7 @@ namespace_packages = true
 no_implicit_optional = true
 python_version = "3.13"
 show_error_codes = true
-strict = false
+strict = true
 warn_return_any = true
 warn_unused_configs = true
 

@@ -4,7 +4,7 @@ milestones:
   - name: Phase 1 — Foundation
     epics:
       - id: PAT-001
-        status: open
+        status: done
         title: Ship the design-pattern library
         overview:
           problem: >-
@@ -27,7 +27,7 @@ milestones:
           - PY-CONC-001
         tasks:
           - id: PAT-001-T1
-            status: open
+            status: done
             title: Implement the four patterns and the quality caller
             instructions:
               files:
@@ -51,7 +51,7 @@ milestones:
             guardrail_refs:
               - PY-TEST-002
           - id: PAT-001-T3
-            status: open
+            status: done
             title: Run the test job on Python 3.14
             instructions:
               files:
@@ -61,7 +61,7 @@ milestones:
             guardrail_refs:
               - PY-TEST-002
           - id: PAT-001-T4
-            status: open
+            status: done
             title: Add a repo-level container CI script
             instructions:
               files:

@@ -4,7 +4,9 @@ from __future__ import annotations
 
 import threading
 
-from pymjolnir import singleton
+import pytest
+
+from pymjolnir import Singleton, singleton
 
 
 def test_singleton_reuses_the_first_instance() -> None:
@@ -58,3 +60,51 @@ def test_concurrent_singleton_builds_once() -> None:
         thread.join()
     assert built == 1
     assert all(item is found[0] for item in found)
+
+
+def test_reentrant_singleton_raises_and_then_caches() -> None:
+    """A factory that calls the wrapper again raises, and a later call caches."""
+    state = {"reenter": True}
+    slots: list[Singleton[Box]] = []
+
+    class Box:
+        """Constructs once the re-entrant call is turned off."""
+
+        def __init__(self) -> None:
+            """Call the wrapper again while the flag is set."""
+            if state["reenter"]:
+                slots[0]()
+            self.ready = True
+
+    slots.append(singleton(Box))
+    wrapped = slots[0]
+    with pytest.raises(RuntimeError, match="re-entered"):
+        wrapped()
+    state["reenter"] = False
+    first = wrapped()
+    second = wrapped()
+    assert first is second
+    assert first.ready is True
+
+
+def test_failed_singleton_constructor_is_not_cached() -> None:
+    """A constructor that raises leaves the wrapper empty for the next call."""
+    state = {"fail": True}
+
+    class Box:
+        """Fails once, then succeeds."""
+
+        def __init__(self) -> None:
+            """Raise while the flag is set."""
+            if state["fail"]:
+                raise ValueError("boom")
+            self.ready = True
+
+    wrapped = singleton(Box)
+    with pytest.raises(ValueError, match="boom"):
+        wrapped()
+    state["fail"] = False
+    first = wrapped()
+    second = wrapped()
+    assert first is second
+    assert first.ready is True
