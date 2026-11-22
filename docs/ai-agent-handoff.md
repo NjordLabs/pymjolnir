@@ -39,7 +39,10 @@ image is private.
 
 ## Suggested next work
 
-- PyPI publish (PAT-001-T2) stays open. The README installs the v0.1.1 release wheel.
+- PyPI publish (PAT-001-T2) stays open. `v0.1.1` is the GitHub Release:
+  https://github.com/NjordLabs/pymjolnir/releases/tag/v0.1.1
+  The wheel sha256 is
+  `5999ff4b244ee0215c96f1228b042f18ad33699dbbc2964d01abd2103eaf050d`.
 
 ## Recent history
 
@@ -47,6 +50,7 @@ image is private.
 - chore(deps): require pylint 4.0.9 and set 0.1.1
 - ci: pin pydevops, skip dependabot secret jobs, add the docker gate
 - docs: record 0.1.1 and close the landed pattern tasks
-- docs(readme): install the v0.1.0 release wheel
+- docs(readme): install the v0.1.1 release wheel
+- release: tag v0.1.1
 
 *Last updated: 2026-11-22.*
