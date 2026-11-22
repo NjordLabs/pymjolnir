@@ -3,11 +3,10 @@
 Design patterns for Python 3.13: a thread-safe registry, a singleton,
 a multiton, and a chain of responsibility.
 
-The package is not on PyPI. When `v0.1.0` is published, install that
-tag:
+The package is not on PyPI. Install the wheel from the GitHub Release:
 
 ```bash
-pip install "pymjolnir @ git+https://github.com/NjordLabs/pymjolnir.git@v0.1.0"
+pip install https://github.com/NjordLabs/pymjolnir/releases/download/v0.1.0/pymjolnir-0.1.0-py3-none-any.whl
 ```
 
 ```python
