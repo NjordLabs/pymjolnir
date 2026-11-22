@@ -38,7 +38,7 @@ sh scripts/check-ci-local.sh
 ## Recent history
 
 - 2026-11-22: Transferred to NjordLabs. Adopted the scaffold. Added the four patterns.
-- docs(readme): tell callers to install the git tag once v0.1.0 exists
+- docs(readme): install the v0.1.0 release wheel
 - Pull request 52 merged. Annotated tag `v0.1.0` is the release.
 
 *Last updated: 2026-11-22.*
