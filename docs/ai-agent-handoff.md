@@ -39,7 +39,7 @@ image is private.
 
 ## Suggested next work
 
-- PyPI publish (PAT-001-T2) stays open. `v0.1.0` is the GitHub Release, and the README install URL stays on that wheel until 0.1.1 is published.
+- PyPI publish (PAT-001-T2) stays open. The README installs the v0.1.1 release wheel.
 
 ## Recent history
 
