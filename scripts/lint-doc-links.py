@@ -19,7 +19,8 @@ import sys
 from pathlib import Path
 from urllib.parse import unquote
 
-SKIP_DIR_NAMES = {".git", "node_modules", "vendor"}
+SKIP_DIR_NAMES = {".git", "node_modules", "vendor", ".agents"}
+SKIP_FILE_NAMES = {"AGENTS.md", "SKILLS.md", "CLAUDE.md"}
 DOC_GLOBS = ("*.md", "*.mdc")
 FENCE_OPEN = re.compile(r"^(`{3,}|~{3,})")
 ABS_PREFIXES = ("http://", "https://", "mailto:", "tel:", "#")
@@ -101,7 +102,7 @@ def is_skipped(path: Path, root: Path) -> bool:
         rel = path.relative_to(root)
     except ValueError:
         return True
-    if any(part in SKIP_DIR_NAMES for part in rel.parts):
+    if rel.name in SKIP_FILE_NAMES or any(part in SKIP_DIR_NAMES for part in rel.parts):
         return True
     current = path.parent
     while current != root and current != current.parent:
