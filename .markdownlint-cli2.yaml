@@ -1,0 +1,4 @@
+ignores:
+  - ".agents/**"
+  - ".github/**"
+  - "docs/guardrails/**"

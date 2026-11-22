@@ -40,3 +40,13 @@ milestones:
               - sh scripts/check-ci-local.sh
             guardrail_refs:
               - PY-TEST-002
+          - id: PAT-001-T2
+            status: open
+            title: Publish to PyPI with a trusted publisher
+            instructions:
+              files:
+                - .github/workflows/publish-pypi.yml
+            verification:
+              - Pending publisher for NjordLabs/pymjolnir, workflow .github/workflows/publish-pypi.yml, environment pypi
+            guardrail_refs:
+              - PY-TEST-002
