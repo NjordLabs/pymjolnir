@@ -16,7 +16,7 @@ jobs:
   python-quality:
     permissions:
       actions: write
-      contents: read
+      contents: write
       packages: read
       pull-requests: write
       security-events: write
