@@ -38,5 +38,6 @@ sh scripts/check-ci-local.sh
 ## Recent history
 
 - 2026-11-22: Transferred to NjordLabs. Adopted the scaffold. Added the four patterns. Quality is green at `96563f7`. The merge is blocked on verified commit signatures.
+- docs(readme): tell callers to install the git tag once v0.1.0 exists
 
 *Last updated: 2026-11-22.*
