@@ -14,20 +14,21 @@ concurrency:
 
 jobs:
   python-quality:
+    if: github.event.pull_request.user.login != 'dependabot[bot]'
     permissions:
       actions: write
-      contents: write
+      contents: read
       packages: read
       pull-requests: write
       security-events: write
-    uses: pirlruc/pydevops/.github/workflows/python-quality.yml@2953853bb9954722e8e2d378554ce44845912c0d
+    uses: pirlruc/pydevops/.github/workflows/python-quality.yml@ce31af67d4b236e42298e9ba6f2984e60ab4ddff
     with:
       devops_repository: pirlruc/pydevops
-      devops_ref: 2953853bb9954722e8e2d378554ce44845912c0d
+      devops_ref: ce31af67d4b236e42298e9ba6f2984e60ab4ddff
       strictness_level: High
       docstring_format: Google
       python_version: "3.13"
-      python_versions: '["3.13"]'
+      python_versions: '["3.13", "3.14"]'
       container_username: pirlruc
     secrets:
       checkout_token: ${{ secrets.PYDEVOPS_READ_TOKEN }}

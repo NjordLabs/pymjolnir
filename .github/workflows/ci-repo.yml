@@ -21,6 +21,7 @@ jobs:
       scripts_ref: 0e78652fa9f65b9d98033ac82bf9e5308ebb17a7
 
   threshold-drift:
+    if: github.event.pull_request.user.login != 'dependabot[bot]'
     permissions:
       contents: read
     uses: pirlruc/commondevops/.github/workflows/common-threshold-drift.yml@0e78652fa9f65b9d98033ac82bf9e5308ebb17a7
@@ -30,6 +31,7 @@ jobs:
       checkout_token: ${{ secrets.GUARDRAILS_READ_TOKEN }}
 
   scaffold:
+    if: github.event.pull_request.user.login != 'dependabot[bot]'
     permissions:
       contents: read
       issues: read
@@ -42,6 +44,7 @@ jobs:
       packs_token: ${{ secrets.GUARDRAILS_READ_TOKEN }}
 
   docs:
+    if: github.event.pull_request.user.login != 'dependabot[bot]'
     permissions:
       contents: read
     uses: pirlruc/commondevops/.github/workflows/common-doc-verify.yml@0e78652fa9f65b9d98033ac82bf9e5308ebb17a7
@@ -73,6 +76,7 @@ jobs:
       blocking: false
 
   token-audit:
+    if: github.event.pull_request.user.login != 'dependabot[bot]'
     permissions:
       contents: read
     uses: pirlruc/commondevops/.github/workflows/common-token-audit.yml@0e78652fa9f65b9d98033ac82bf9e5308ebb17a7
