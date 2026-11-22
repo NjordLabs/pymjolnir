@@ -33,11 +33,10 @@ sh scripts/check-ci-local.sh
 
 ## Suggested next work
 
-- Tag `v0.1.0` after Quality is green.
-- Point the pydevops pin at the merged 3.8.0 commit if it is not `84bf54b`.
+- Tag `v0.1.0` after the pull request merges. Quality on pull request 52 is green. The default-branch ruleset rejects the merge because the commits are unsigned.
 
 ## Recent history
 
-- 2026-11-22: Transferred to NjordLabs. Adopted the scaffold. Added the four patterns.
+- 2026-11-22: Transferred to NjordLabs. Adopted the scaffold. Added the four patterns. Quality is green at `96563f7`. The merge is blocked on verified commit signatures.
 
 *Last updated: 2026-11-22.*
