@@ -50,3 +50,23 @@ milestones:
               - Pending publisher for NjordLabs/pymjolnir, workflow .github/workflows/publish-pypi.yml, environment pypi
             guardrail_refs:
               - PY-TEST-002
+          - id: PAT-001-T3
+            status: open
+            title: Run the test job on Python 3.14
+            instructions:
+              files:
+                - .github/workflows/ci-quality.yml
+            verification:
+              - sh scripts/check-ci-local.sh
+            guardrail_refs:
+              - PY-TEST-002
+          - id: PAT-001-T4
+            status: open
+            title: Add a repo-level container CI script
+            instructions:
+              files:
+                - scripts/check-ci-docker.sh
+            verification:
+              - sh scripts/check-ci-docker.sh
+            guardrail_refs:
+              - PY-TEST-002

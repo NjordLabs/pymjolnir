@@ -3,7 +3,7 @@
 # the tools live in the project virtualenv.
 set -eu
 
-ROOT="$(CDPATH= cd -- "$(dirname "$0")/.." && pwd)"
+ROOT="$(CDPATH='' cd -- "$(dirname "$0")/.." && pwd)"
 cd "${ROOT}"
 
 uv sync --frozen --extra dev
