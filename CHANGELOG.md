@@ -7,6 +7,8 @@ Release notes are updated with [Commitizen](https://github.com/commitizen-tools/
 
 ## Unreleased
 
+## 0.1.2 - 2026-11-26
+
 ### Fixed
 
 - A singleton factory that returns `None` is cached. The call guard is one module.
