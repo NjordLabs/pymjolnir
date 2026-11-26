@@ -16,17 +16,17 @@ jobs:
   pins:
     permissions:
       contents: read
-    uses: pirlruc/commondevops/.github/workflows/common-pins-verify.yml@0e78652fa9f65b9d98033ac82bf9e5308ebb17a7
+    uses: pirlruc/commondevops/.github/workflows/common-pins-verify.yml@ff65e7efbb7eea67bd659f886db0adb399f3a3f5
     with:
-      scripts_ref: 0e78652fa9f65b9d98033ac82bf9e5308ebb17a7
+      scripts_ref: ff65e7efbb7eea67bd659f886db0adb399f3a3f5
 
   threshold-drift:
     if: github.event.pull_request.user.login != 'dependabot[bot]'
     permissions:
       contents: read
-    uses: pirlruc/commondevops/.github/workflows/common-threshold-drift.yml@0e78652fa9f65b9d98033ac82bf9e5308ebb17a7
+    uses: pirlruc/commondevops/.github/workflows/common-threshold-drift.yml@ff65e7efbb7eea67bd659f886db0adb399f3a3f5
     with:
-      scripts_ref: 0e78652fa9f65b9d98033ac82bf9e5308ebb17a7
+      scripts_ref: ff65e7efbb7eea67bd659f886db0adb399f3a3f5
     secrets:
       checkout_token: ${{ secrets.GUARDRAILS_READ_TOKEN }}
 
@@ -35,10 +35,10 @@ jobs:
     permissions:
       contents: read
       issues: read
-    uses: pirlruc/commondevops/.github/workflows/common-scaffold-verify.yml@0e78652fa9f65b9d98033ac82bf9e5308ebb17a7
+    uses: pirlruc/commondevops/.github/workflows/common-scaffold-verify.yml@ff65e7efbb7eea67bd659f886db0adb399f3a3f5
     with:
       blocking: true
-      scripts_ref: 0e78652fa9f65b9d98033ac82bf9e5308ebb17a7
+      scripts_ref: ff65e7efbb7eea67bd659f886db0adb399f3a3f5
     secrets:
       checkout_token: ${{ secrets.COMMONDEVOPS_READ_TOKEN }}
       packs_token: ${{ secrets.GUARDRAILS_READ_TOKEN }}
@@ -47,7 +47,7 @@ jobs:
     if: github.event.pull_request.user.login != 'dependabot[bot]'
     permissions:
       contents: read
-    uses: pirlruc/commondevops/.github/workflows/common-doc-verify.yml@0e78652fa9f65b9d98033ac82bf9e5308ebb17a7
+    uses: pirlruc/commondevops/.github/workflows/common-doc-verify.yml@ff65e7efbb7eea67bd659f886db0adb399f3a3f5
     with:
       blocking: true
       shell_scripts: scripts/*.sh
@@ -55,7 +55,10 @@ jobs:
       yaml_files: docs/issues.yml docs/guardrail-deviations.yml docs/issues-sync-targets.yml
       yaml_globs: .github/workflows/*.yml
       run_link_lint: true
-      scripts_ref: 0e78652fa9f65b9d98033ac82bf9e5308ebb17a7
+      run_hygiene: true
+      hygiene_owners: pirlruc,NjordLabs
+      hygiene_allowed_repos: pirlruc/*,NjordLabs/*
+      scripts_ref: ff65e7efbb7eea67bd659f886db0adb399f3a3f5
     secrets:
       checkout_token: ${{ secrets.COMMONDEVOPS_READ_TOKEN }}
 
@@ -63,7 +66,7 @@ jobs:
     permissions:
       contents: read
       pull-requests: read
-    uses: pirlruc/commondevops/.github/workflows/common-dependency-review.yml@0e78652fa9f65b9d98033ac82bf9e5308ebb17a7
+    uses: pirlruc/commondevops/.github/workflows/common-dependency-review.yml@ff65e7efbb7eea67bd659f886db0adb399f3a3f5
 
   scorecard:
     permissions:
@@ -71,7 +74,7 @@ jobs:
       actions: read
       security-events: write
       id-token: write
-    uses: pirlruc/commondevops/.github/workflows/common-scorecard.yml@0e78652fa9f65b9d98033ac82bf9e5308ebb17a7
+    uses: pirlruc/commondevops/.github/workflows/common-scorecard.yml@ff65e7efbb7eea67bd659f886db0adb399f3a3f5
     with:
       blocking: false
 
@@ -79,9 +82,9 @@ jobs:
     if: github.event.pull_request.user.login != 'dependabot[bot]'
     permissions:
       contents: read
-    uses: pirlruc/commondevops/.github/workflows/common-token-audit.yml@0e78652fa9f65b9d98033ac82bf9e5308ebb17a7
+    uses: pirlruc/commondevops/.github/workflows/common-token-audit.yml@ff65e7efbb7eea67bd659f886db0adb399f3a3f5
     with:
-      scripts_ref: 0e78652fa9f65b9d98033ac82bf9e5308ebb17a7
+      scripts_ref: ff65e7efbb7eea67bd659f886db0adb399f3a3f5
     secrets:
       checkout_token: ${{ secrets.COMMONDEVOPS_READ_TOKEN }}
       guardrails_token: ${{ secrets.GUARDRAILS_READ_TOKEN }}
