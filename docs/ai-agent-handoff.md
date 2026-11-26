@@ -42,7 +42,7 @@ image is private.
 - PyPI publish (PAT-001-T2) stays open. [`v0.1.2`](https://github.com/NjordLabs/pymjolnir/releases/tag/v0.1.2)
   is the GitHub Release.
   The wheel sha256 is
-  `7747d8bc6eaafbb26f01ebb87db540263c8ae2b6e51923db6dafa566b170780b`.
+  `26842daa3408884cf6bb70e3130f832ee8675426e957989c3e76d20bb31c8180`.
 
 ## Recent history
 
