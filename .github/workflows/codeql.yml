@@ -14,6 +14,6 @@ jobs:
       actions: read
       contents: read
       security-events: write
-    uses: pirlruc/pydevops/.github/workflows/python-codeql.yml@ce31af67d4b236e42298e9ba6f2984e60ab4ddff
+    uses: pirlruc/pydevops/.github/workflows/python-codeql.yml@f0fff3a920d8cdf92f60cc1d2999273424793335
     with:
       queries: security-extended
