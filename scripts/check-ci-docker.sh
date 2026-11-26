@@ -42,7 +42,7 @@ docker run --rm \
     sh -c '
 set -eu
 mkdir -p /tmp/deps /tmp/mypy /tmp/pycache /tmp/ruff
-python -m pip install -q --no-cache-dir --require-hashes --target /tmp/deps -r /work/.ci-wheels/requirements.txt
+python -m pip install -q --no-cache-dir --no-deps --require-hashes --target /tmp/deps -r /work/.ci-wheels/requirements.txt
 export PYTHONPATH=/tmp/deps
 export COVERAGE_FILE=/tmp/.coverage
 export MYPY_CACHE_DIR=/tmp/mypy
