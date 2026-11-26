@@ -19,8 +19,7 @@ import sys
 from pathlib import Path
 from urllib.parse import unquote
 
-SKIP_DIR_NAMES = {".git", "node_modules", "vendor", ".agents"}
-SKIP_FILE_NAMES = {"AGENTS.md", "SKILLS.md", "CLAUDE.md"}
+SKIP_DIR_NAMES = {".git", "node_modules", "vendor"}
 DOC_GLOBS = ("*.md", "*.mdc")
 FENCE_OPEN = re.compile(r"^(`{3,}|~{3,})")
 ABS_PREFIXES = ("http://", "https://", "mailto:", "tel:", "#")
@@ -102,7 +101,7 @@ def is_skipped(path: Path, root: Path) -> bool:
         rel = path.relative_to(root)
     except ValueError:
         return True
-    if rel.name in SKIP_FILE_NAMES or any(part in SKIP_DIR_NAMES for part in rel.parts):
+    if any(part in SKIP_DIR_NAMES for part in rel.parts):
         return True
     current = path.parent
     while current != root and current != current.parent:
@@ -257,9 +256,7 @@ def check_file(md_file: Path, root: Path) -> list[str]:
         path_only = path_from_destination(raw)
         if path_only is None:
             continue
-        if any(
-            target_ok(candidate) for candidate in candidate_targets(md_file, path_only, root)
-        ):
+        if any(target_ok(candidate) for candidate in candidate_targets(md_file, path_only, root)):
             continue
         target = (md_file.parent / path_only).resolve()
         if is_repo_relative(path_only):
@@ -277,10 +274,7 @@ def main(argv: list[str] | None = None) -> int:
     root = resolve_root(args.root)
     doc_files = collect_doc_files(root)
     if not doc_files:
-        print(
-            f"ERROR: no markdown or Cursor-rule files found under {root}",
-            file=sys.stderr,
-        )
+        print(f"ERROR: no markdown or Cursor-rule files found under {root}", file=sys.stderr)
         return 1
     failures: list[str] = []
     for md_file in doc_files:

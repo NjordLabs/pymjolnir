@@ -6,7 +6,7 @@
 |-------|-------|
 | Package | `pymjolnir` |
 | Python | 3.13 and 3.14 |
-| Pins | guardrails `1.15.0` (`2d4bb70`), scaffold `1.12.0` (`9c443ea`), pydevops (`ce31af67`) |
+| Pins | guardrails `1.17.1` (`8508e936`), scaffold `1.14.3` (`1fca8a3b`), pydevops `3.11.1` (`efef9824`) |
 
 ## Scope
 

@@ -1,13 +1,14 @@
 #!/bin/sh
 # Run the quality gates inside the published ci-python image.
-# The image has no uv. The checkout is mounted read-only and
-# dependencies are installed only inside the container.
-# Tag in the digest comment: ghcr.io/pirlruc/ci-python:3.3.0 (linux/amd64).
+# The image has no uv. The wheel is built on the host and installed
+# in the container with --require-hashes. The checkout stays read-only.
+# Tag in the digest comment: ghcr.io/pirlruc/ci-python:3.10.1 (linux/amd64).
 # The image is private. Log in first: docker login ghcr.io
 set -eu
 
 ROOT="$(CDPATH='' cd -- "$(dirname "$0")/.." && pwd)"
-IMAGE="${PYMJOLNIR_CI_IMAGE:-ghcr.io/pirlruc/ci-python@sha256:894d5ae1d9bd55d68262f4ed65cd6f57d7186038d7e8e8668dba443ee0ebfbbd}"
+cd "${ROOT}"
+IMAGE="${PYMJOLNIR_CI_IMAGE:-ghcr.io/pirlruc/ci-python@sha256:8bdd74a184074a58c75473da06fce79d890ef2ddb230011ddf70ebfb7b10778d}"
 
 if ! command -v docker >/dev/null 2>&1; then
     echo "docker is required" >&2
@@ -18,6 +19,20 @@ if ! docker image inspect "${IMAGE}" >/dev/null 2>&1; then
     docker pull "${IMAGE}"
 fi
 
+# /tmp is not shared with Docker on this host. The directory sits in the
+# checkout, which is already a shared path, and the mount is read-only.
+WHEEL_DIR="${ROOT}/.ci-wheels"
+rm -rf "${WHEEL_DIR}"
+mkdir -p "${WHEEL_DIR}"
+trap 'rm -rf "${WHEEL_DIR}"' EXIT
+uv build --wheel --out-dir "${WHEEL_DIR}" >/dev/null
+wheel="$(find "${WHEEL_DIR}" -name '*.whl' -printf '%f\n')"
+hash="$(sha256sum "${WHEEL_DIR}/${wheel}" | awk '{print $1}')"
+printf 'pymjolnir @ file:///work/.ci-wheels/%s --hash=sha256:%s\n' "${wheel}" "${hash}" \
+    >"${WHEEL_DIR}/requirements.txt"
+uv export --frozen --no-dev --no-emit-project --no-header --hashes \
+    >>"${WHEEL_DIR}/requirements.txt"
+
 echo "==> Quality gates in ${IMAGE}"
 docker run --rm \
     -v "${ROOT}:/work:ro" \
@@ -26,10 +41,8 @@ docker run --rm \
     "${IMAGE}" \
     sh -c '
 set -eu
-mkdir -p /tmp/pkg /tmp/deps /tmp/mypy /tmp/pycache /tmp/ruff
-cp pyproject.toml README.md LICENSE /tmp/pkg/
-cp -a src /tmp/pkg/src
-python -m pip install -q --no-cache-dir --target /tmp/deps /tmp/pkg
+mkdir -p /tmp/deps /tmp/mypy /tmp/pycache /tmp/ruff
+python -m pip install -q --no-cache-dir --no-deps --require-hashes --target /tmp/deps -r /work/.ci-wheels/requirements.txt
 export PYTHONPATH=/tmp/deps
 export COVERAGE_FILE=/tmp/.coverage
 export MYPY_CACHE_DIR=/tmp/mypy

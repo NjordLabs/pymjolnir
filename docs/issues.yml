@@ -4,7 +4,7 @@ milestones:
   - name: Phase 1 — Foundation
     epics:
       - id: PAT-001
-        status: done
+        status: open
         title: Ship the design-pattern library
         overview:
           problem: >-
@@ -70,3 +70,77 @@ milestones:
               - sh scripts/check-ci-docker.sh
             guardrail_refs:
               - PY-TEST-002
+
+      - id: PIN-001
+        status: done
+        title: Pin the current guardrails and keep tools out of the product
+        decision: >-
+          In the context of a library install, facing dev tools published
+          as an extra, we decided to move those tools into a dependency
+          group and to pin guardrails 1.17.1, to achieve a product lock
+          without the toolchain, accepting a lock refresh.
+        overview:
+          problem: >-
+            The dev extra shipped with the package, and the local script
+            did not run the complexity or vulnerability gates.
+          goal: >-
+            Dev tools live in a dependency group. Local CI runs radon and
+            pip-audit. The container install is hash-locked.
+        acceptance_criteria:
+          - docs/guardrails is 1.17.1 and .github/scaffold is 1.14.3
+          - dev dependencies are a dependency group
+          - check-ci-local.sh runs radon and pip-audit
+          - check-ci-docker.sh installs with --require-hashes
+        guardrail_refs:
+          - SC-DEP-008
+          - PY-RUN-002
+          - PY-SEC-004
+        tasks:
+          - id: PIN-001-T1
+            status: done
+            title: Bump the pins and the local gates
+            instructions:
+              files:
+                - docs/guardrails
+                - .github/scaffold
+                - pyproject.toml
+                - scripts/check-ci-local.sh
+                - scripts/check-ci-docker.sh
+            verification:
+              - sh scripts/check-ci-local.sh
+              - sh scripts/check-ci-docker.sh
+            guardrail_refs:
+              - SC-DEP-008
+
+      - id: FIX-001
+        status: open
+        title: Cache a singleton whose factory returns None
+        decision: >-
+          In the context of a singleton factory, facing a cached None that
+          looked empty, we decided to use a private sentinel and one call
+          guard, to achieve a cache that can store None, accepting that
+          reset clears that sentinel.
+        overview:
+          problem: >-
+            A cached None looked like an empty slot, so the factory ran
+            again. The call guard was copied in two modules.
+          goal: >-
+            None is a cached value, and the call guard is one module.
+        acceptance_criteria:
+          - A factory that returns None runs once
+          - singleton and multiton import the same call guard
+        guardrail_refs:
+          - PY-CPLX-003
+        tasks:
+          - id: FIX-001-T1
+            status: open
+            title: Cache None and share the call guard
+            instructions:
+              files:
+                - src/pymjolnir/singleton.py
+                - src/pymjolnir/multiton.py
+                - src/pymjolnir/_guard.py
+            verification:
+              - uv run pytest -q
+            guardrail_refs:
+              - PY-CPLX-003
