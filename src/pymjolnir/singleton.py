@@ -4,6 +4,11 @@ from __future__ import annotations
 
 import threading
 from collections.abc import Callable
+from typing import cast
+
+from pymjolnir._guard import CallGuard
+
+_MISSING = object()
 
 
 class Singleton[T]:
@@ -17,8 +22,8 @@ class Singleton[T]:
         """
         self._cls = cls
         self._lock = threading.Lock()
-        self._guard = _CallGuard()
-        self._instance: T | None = None
+        self._guard = CallGuard()
+        self._instance: T | object = _MISSING
 
     def __call__(self, *args: object, **kwargs: object) -> T:
         """Return the existing instance, or build it.
@@ -41,8 +46,8 @@ class Singleton[T]:
             raise RuntimeError("singleton factory re-entered the same wrapper")
         with self._lock:
             cached = self._instance
-            if cached is not None:
-                return cached
+            if cached is not _MISSING:
+                return cast(T, cached)
             self._guard.building = True
             try:
                 created = self._cls(*args, **kwargs)
@@ -54,16 +59,7 @@ class Singleton[T]:
     def reset(self) -> None:
         """Drop the instance so the next call constructs again."""
         with self._lock:
-            self._instance = None
-
-
-class _CallGuard(threading.local):
-    """Per-thread flag set while this wrapper's factory is running."""
-
-    def __init__(self) -> None:
-        """Start outside a factory call."""
-        super().__init__()
-        self.building = False
+            self._instance = _MISSING
 
 
 def singleton[T](cls: Callable[..., T]) -> Singleton[T]:

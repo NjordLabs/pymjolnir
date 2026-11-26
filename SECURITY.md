@@ -2,7 +2,7 @@
 
 ## Reporting a vulnerability
 
-Do not open a public issue for a vulnerability. Report it privately at <https://github.com/NjordLabs/pymjolnir/security/advisories/new>. Email the maintainer with a description, the affected version or image digest, and a way to reproduce it. You will get an acknowledgement within 7 days.
+Do not open a public issue for a vulnerability. Report it privately at <https://github.com/NjordLabs/pymjolnir/security/advisories/new>. Include the affected version and a way to reproduce it. You will get an acknowledgement within 7 days.
 
 ## Supported versions
 
@@ -10,4 +10,4 @@ Security fixes land on the default branch and ship in the next release. Older ta
 
 ## What this covers
 
-This repository's code, published images, and reusable workflows. A finding in a third-party base image is in scope when this repository publishes that base as part of its own image.
+This repository's code and the wheels attached to its GitHub Releases.

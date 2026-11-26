@@ -9,6 +9,21 @@ import pytest
 from pymjolnir import Singleton, singleton
 
 
+def test_singleton_caches_none() -> None:
+    """A factory that returns None is still cached."""
+    calls = 0
+
+    def factory() -> None:
+        """Count constructions and return None."""
+        nonlocal calls
+        calls += 1
+
+    wrapped = Singleton(factory)
+    assert wrapped() is None
+    assert wrapped() is None
+    assert calls == 1
+
+
 def test_singleton_reuses_the_first_instance() -> None:
     """The second call ignores new constructor arguments."""
 
