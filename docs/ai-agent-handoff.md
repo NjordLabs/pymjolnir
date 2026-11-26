@@ -39,10 +39,10 @@ image is private.
 
 ## Suggested next work
 
-- PyPI publish (PAT-001-T2) stays open. [`v0.1.1`](https://github.com/NjordLabs/pymjolnir/releases/tag/v0.1.1)
+- PyPI publish (PAT-001-T2) stays open. [`v0.1.2`](https://github.com/NjordLabs/pymjolnir/releases/tag/v0.1.2)
   is the GitHub Release.
   The wheel sha256 is
-  `5999ff4b244ee0215c96f1228b042f18ad33699dbbc2964d01abd2103eaf050d`.
+  `7747d8bc6eaafbb26f01ebb87db540263c8ae2b6e51923db6dafa566b170780b`.
 
 ## Recent history
 
@@ -53,4 +53,4 @@ image is private.
 - docs(readme): install the v0.1.1 release wheel
 - release: tag v0.1.1
 
-*Last updated: 2026-11-22.*
+*Last updated: 2026-11-26.*

@@ -6,7 +6,7 @@ a multiton, and a chain of responsibility.
 The package is not on PyPI. Install the wheel from the GitHub Release:
 
 ```bash
-pip install https://github.com/NjordLabs/pymjolnir/releases/download/v0.1.1/pymjolnir-0.1.1-py3-none-any.whl
+pip install "https://github.com/NjordLabs/pymjolnir/releases/download/v0.1.2/pymjolnir-0.1.2-py3-none-any.whl#sha256=7747d8bc6eaafbb26f01ebb87db540263c8ae2b6e51923db6dafa566b170780b"
 ```
 
 ```python

@@ -113,7 +113,7 @@ milestones:
               - SC-DEP-008
 
       - id: FIX-001
-        status: open
+        status: done
         title: Cache a singleton whose factory returns None
         decision: >-
           In the context of a singleton factory, facing a cached None that
@@ -133,7 +133,7 @@ milestones:
           - PY-CPLX-003
         tasks:
           - id: FIX-001-T1
-            status: open
+            status: done
             title: Cache None and share the call guard
             instructions:
               files:
