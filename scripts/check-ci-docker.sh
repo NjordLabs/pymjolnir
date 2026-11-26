@@ -19,12 +19,16 @@ if ! docker image inspect "${IMAGE}" >/dev/null 2>&1; then
     docker pull "${IMAGE}"
 fi
 
-WHEEL_DIR="$(mktemp -d)"
+# /tmp is not shared with Docker on this host. The directory sits in the
+# checkout, which is already a shared path, and the mount is read-only.
+WHEEL_DIR="${ROOT}/.ci-wheels"
+rm -rf "${WHEEL_DIR}"
+mkdir -p "${WHEEL_DIR}"
 trap 'rm -rf "${WHEEL_DIR}"' EXIT
 uv build --wheel --out-dir "${WHEEL_DIR}" >/dev/null
 wheel="$(find "${WHEEL_DIR}" -name '*.whl' -printf '%f\n')"
 hash="$(sha256sum "${WHEEL_DIR}/${wheel}" | awk '{print $1}')"
-printf 'pymjolnir @ file:///wheels/%s --hash=sha256:%s\n' "${wheel}" "${hash}" \
+printf 'pymjolnir @ file:///work/.ci-wheels/%s --hash=sha256:%s\n' "${wheel}" "${hash}" \
     >"${WHEEL_DIR}/requirements.txt"
 uv export --frozen --no-dev --no-emit-project --no-header --hashes \
     >>"${WHEEL_DIR}/requirements.txt"
@@ -32,14 +36,13 @@ uv export --frozen --no-dev --no-emit-project --no-header --hashes \
 echo "==> Quality gates in ${IMAGE}"
 docker run --rm \
     -v "${ROOT}:/work:ro" \
-    -v "${WHEEL_DIR}:/wheels:ro" \
     -w /work \
     --user root \
     "${IMAGE}" \
     sh -c '
 set -eu
 mkdir -p /tmp/deps /tmp/mypy /tmp/pycache /tmp/ruff
-python -m pip install -q --no-cache-dir --require-hashes --target /tmp/deps -r /wheels/requirements.txt
+python -m pip install -q --no-cache-dir --require-hashes --target /tmp/deps -r /work/.ci-wheels/requirements.txt
 export PYTHONPATH=/tmp/deps
 export COVERAGE_FILE=/tmp/.coverage
 export MYPY_CACHE_DIR=/tmp/mypy

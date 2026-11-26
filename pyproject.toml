@@ -79,6 +79,14 @@ warn_unused_configs = true
 disallow_untyped_defs = false
 module = "tests.*"
 
+[[tool.mypy.overrides]]
+ignore_missing_imports = true
+module = "hypothesis"
+
+[[tool.mypy.overrides]]
+disallow_untyped_decorators = false
+module = "tests.test_registry_properties"
+
 [tool.coverage.run]
 branch = true
 source = ["pymjolnir"]
