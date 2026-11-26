@@ -5,6 +5,8 @@ from __future__ import annotations
 import threading
 from collections.abc import Callable
 
+from pymjolnir._guard import CallGuard
+
 
 class Multiton[T]:
     """Build and cache one value per key."""
@@ -18,7 +20,7 @@ class Multiton[T]:
         self._factory = factory
         self._items: dict[str, T] = {}
         self._lock = threading.Lock()
-        self._guard = _CallGuard()
+        self._guard = CallGuard()
 
     def get(self, key: str) -> T:
         """Return the cached value for ``key``, creating it when needed.
@@ -63,12 +65,3 @@ class Multiton[T]:
                 self._items.clear()
                 return
             self._items.pop(key, None)
-
-
-class _CallGuard(threading.local):
-    """Per-thread flag set while this multiton's factory is running."""
-
-    def __init__(self) -> None:
-        """Start outside a factory call."""
-        super().__init__()
-        self.building = False

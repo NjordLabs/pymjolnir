@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 Release notes are updated with [Commitizen](https://github.com/commitizen-tools/commitizen)
 (`cz bump`).
 
+## Unreleased
+
+### Fixed
+
+- A singleton factory that returns `None` is cached. The call guard is one module.
+
 ## 0.1.1
 
 ### Fixed
