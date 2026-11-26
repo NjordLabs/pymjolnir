@@ -2,13 +2,16 @@
 
 from __future__ import annotations
 
+import importlib.util
+
 import pytest
 
-pytest.importorskip("hypothesis")
-from hypothesis import given  # noqa: E402
-from hypothesis import strategies as st  # noqa: E402
+if importlib.util.find_spec("hypothesis") is None:
+    pytest.skip("hypothesis is not installed", allow_module_level=True)
+from hypothesis import given
+from hypothesis import strategies as st
 
-from pymjolnir import DuplicateKeyError, Registry  # noqa: E402
+from pymjolnir import DuplicateKeyError, Registry
 
 
 @given(st.text(min_size=1, max_size=40))
